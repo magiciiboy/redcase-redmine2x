@@ -4,9 +4,9 @@
 
 <%= form_for :list2, :url => { :action => 'update_exelists', :project_id => @project.id } do |f| %>
     <div>
-<table>
+<table class="execute-selection-table">
 <tr>
-  <td>
+  <td width="33%">
     <h3 id="execution-settings-suite">
         <%= l('label_execution_suite') %>
     </h3>
@@ -14,7 +14,7 @@
         <%= f.select :id, @lists2.collect { |e| [ e.name, e.id ] } %>
     </h3>
   </td>
-  <td>
+  <td width="33%">
     <h3 id="execution-settings-version">
         <%= l('label_version') %>
     </h3>
@@ -22,7 +22,7 @@
         <%= select_tag 'version', options_for_select(Version.find_all_by_project_id(@project.id).collect { |res| res.name }, @version.name ) %>
     </h3>
   </td>
-  <td>
+  <td width="33%">
     <h3 id="execution-settings-environment">
         <%= l('label_environment') %>
     </h3>
