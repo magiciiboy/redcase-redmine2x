@@ -1966,7 +1966,7 @@ Ajax.Updater = Class.create(Ajax.Request, {
 
     if (!options.evalScripts) responseText = responseText.stripScripts();
 
-    if (receiver = $(receiver)) {
+    if (receiver = $rc(receiver)) {
       if (options.insertion) {
         if (Object.isString(options.insertion)) {
           var insertion = { }; insertion[options.insertion] = responseText;
@@ -2028,10 +2028,10 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   var DIV = document.createElement('div');
 
 
-  function $(element) {
+  function $rc(element) {
     if (arguments.length > 1) {
       for (var i = 0, elements = [], length = arguments.length; i < length; i++)
-        elements.push($(arguments[i]));
+        elements.push($rc(arguments[i]));
       return elements;
     }
 
@@ -2040,7 +2040,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
     return Element.extend(element);
   }
 
-  GLOBAL.$ = $;
+  GLOBAL.$rc = $rc;
 
 
   if (!GLOBAL.Node) GLOBAL.Node = {};
@@ -2112,7 +2112,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
 
   var INSPECT_ATTRIBUTES = { id: 'id', className: 'class' };
   function inspect(element) {
-    element = $(element);
+    element = $rc(element);
     var result = '<' + element.tagName.toLowerCase();
 
     var attribute, value;
@@ -2129,11 +2129,11 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
 
 
   function visible(element) {
-    return $(element).style.display !== 'none';
+    return $rc(element).style.display !== 'none';
   }
 
   function toggle(element, bool) {
-    element = $(element);
+    element = $rc(element);
     if (Object.isUndefined(bool))
       bool = !Element.visible(element);
     Element[bool ? 'show' : 'hide'](element);
@@ -2142,13 +2142,13 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function hide(element) {
-    element = $(element);
+    element = $rc(element);
     element.style.display = 'none';
     return element;
   }
 
   function show(element) {
-    element = $(element);
+    element = $rc(element);
     element.style.display = '';
     return element;
   }
@@ -2163,7 +2163,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
 
 
   function remove(element) {
-    element = $(element);
+    element = $rc(element);
     element.parentNode.removeChild(element);
     return element;
   }
@@ -2223,7 +2223,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   })();
 
   function update(element, content) {
-    element = $(element);
+    element = $rc(element);
 
     var descendants = element.getElementsByTagName('*'),
      i = descendants.length;
@@ -2274,7 +2274,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function replace(element, content) {
-    element = $(element);
+    element = $rc(element);
 
     if (content && content.toElement) {
       content = content.toElement();
@@ -2322,7 +2322,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   });
 
   function replace_IE(element, content) {
-    element = $(element);
+    element = $rc(element);
     if (content && content.toElement)
       content = content.toElement();
     if (Object.isElement(content)) {
@@ -2393,7 +2393,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function insert(element, insertions) {
-    element = $(element);
+    element = $rc(element);
 
     if (isContent(insertions))
       insertions = { bottom: insertions };
@@ -2405,10 +2405,10 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function wrap(element, wrapper, attributes) {
-    element = $(element);
+    element = $rc(element);
 
     if (Object.isElement(wrapper)) {
-      $(wrapper).writeAttribute(attributes || {});
+      $rc(wrapper).writeAttribute(attributes || {});
     } else if (Object.isString(wrapper)) {
       wrapper = new Element(wrapper, attributes);
     } else {
@@ -2424,7 +2424,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function cleanWhitespace(element) {
-    element = $(element);
+    element = $rc(element);
     var node = element.firstChild;
 
     while (node) {
@@ -2437,7 +2437,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function empty(element) {
-    return $(element).innerHTML.blank();
+    return $rc(element).innerHTML.blank();
   }
 
   function getContentFromAnonymousElement(tagName, html, force) {
@@ -2462,7 +2462,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function clone(element, deep) {
-    if (!(element = $(element))) return;
+    if (!(element = $rc(element))) return;
     var clone = element.cloneNode(deep);
     if (!HAS_UNIQUE_ID_PROPERTY) {
       clone._prototypeUID = UNDEFINED;
@@ -2508,7 +2508,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
 
 
   function purge(element) {
-    if (!(element = $(element))) return;
+    if (!(element = $rc(element))) return;
     purgeElement(element);
 
     var descendants = element.getElementsByTagName('*'),
@@ -2534,7 +2534,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
 
 
   function recursivelyCollect(element, property, maximumLength) {
-    element = $(element);
+    element = $rc(element);
     maximumLength = maximumLength || -1;
     var elements = [];
 
@@ -2558,15 +2558,15 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function firstDescendant(element) {
-    element = $(element).firstChild;
+    element = $rc(element).firstChild;
     while (element && element.nodeType !== Node.ELEMENT_NODE)
       element = element.nextSibling;
 
-    return $(element);
+    return $rc(element);
   }
 
   function immediateDescendants(element) {
-    var results = [], child = $(element).firstChild;
+    var results = [], child = $rc(element).firstChild;
 
     while (child) {
       if (child.nodeType === Node.ELEMENT_NODE)
@@ -2587,14 +2587,14 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function siblings(element) {
-    element = $(element);
+    element = $rc(element);
     var previous = previousSiblings(element),
      next = nextSiblings(element);
     return previous.reverse().concat(next);
   }
 
   function match(element, selector) {
-    element = $(element);
+    element = $rc(element);
 
     if (Object.isString(selector))
       return Prototype.Selector.match(element, selector);
@@ -2604,7 +2604,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
 
 
   function _recursivelyFind(element, property, expression, index) {
-    element = $(element), expression = expression || 0, index = index || 0;
+    element = $rc(element), expression = expression || 0, index = index || 0;
     if (Object.isNumber(expression)) {
       index = expression, expression = null;
     }
@@ -2621,14 +2621,14 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
 
 
   function up(element, expression, index) {
-    element = $(element);
+    element = $rc(element);
 
-    if (arguments.length === 1) return $(element.parentNode);
+    if (arguments.length === 1) return $rc(element.parentNode);
     return _recursivelyFind(element, 'parentNode', expression, index);
   }
 
   function down(element, expression, index) {
-    element = $(element), expression = expression || 0, index = index || 0;
+    element = $rc(element), expression = expression || 0, index = index || 0;
 
     if (Object.isNumber(expression))
       index = expression, expression = '*';
@@ -2646,13 +2646,13 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function select(element) {
-    element = $(element);
+    element = $rc(element);
     var expressions = SLICE.call(arguments, 1).join(', ');
     return Prototype.Selector.select(expressions, element);
   }
 
   function adjacent(element) {
-    element = $(element);
+    element = $rc(element);
     var expressions = SLICE.call(arguments, 1).join(', ');
     var siblings = Element.siblings(element), results = [];
     for (var i = 0, sibling; sibling = siblings[i]; i++) {
@@ -2664,20 +2664,20 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function descendantOf_DOM(element, ancestor) {
-    element = $(element), ancestor = $(ancestor);
+    element = $rc(element), ancestor = $rc(ancestor);
     while (element = element.parentNode)
       if (element === ancestor) return true;
     return false;
   }
 
   function descendantOf_contains(element, ancestor) {
-    element = $(element), ancestor = $(ancestor);
+    element = $rc(element), ancestor = $rc(ancestor);
     if (!ancestor.contains) return descendantOf_DOM(element, ancestor);
     return ancestor.contains(element) && ancestor !== element;
   }
 
   function descendantOf_compareDocumentPosition(element, ancestor) {
-    element = $(element), ancestor = $(ancestor);
+    element = $rc(element), ancestor = $rc(ancestor);
     return (element.compareDocumentPosition(ancestor) & 8) === 8;
   }
 
@@ -2717,11 +2717,11 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
 
   var idCounter = 1;
   function identify(element) {
-    element = $(element);
+    element = $rc(element);
     var id = Element.readAttribute(element, 'id');
     if (id) return id;
 
-    do { id = 'anonymous_element_' + idCounter++ } while ($(id));
+    do { id = 'anonymous_element_' + idCounter++ } while ($rc(id));
 
     Element.writeAttribute(element, 'id', id);
     return id;
@@ -2729,11 +2729,11 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
 
 
   function readAttribute(element, name) {
-    return $(element).getAttribute(name);
+    return $rc(element).getAttribute(name);
   }
 
   function readAttribute_IE(element, name) {
-    element = $(element);
+    element = $rc(element);
 
     var table = ATTRIBUTE_TRANSLATIONS.read;
     if (table.values[name])
@@ -2770,7 +2770,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
 
 
   function writeAttribute(element, name, value) {
-    element = $(element);
+    element = $rc(element);
     var attributes = {}, table = ATTRIBUTE_TRANSLATIONS.write;
 
     if (typeof name === 'object') {
@@ -2796,7 +2796,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
 
   function hasAttribute(element, attribute) {
     attribute = ATTRIBUTE_TRANSLATIONS.has[attribute] || attribute;
-    var node = $(element).getAttributeNode(attribute);
+    var node = $rc(element).getAttributeNode(attribute);
     return !!(node && node.specified);
   }
 
@@ -2816,7 +2816,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function hasClassName(element, className) {
-    if (!(element = $(element))) return;
+    if (!(element = $rc(element))) return;
 
     var elementClassName = element.className;
 
@@ -2827,7 +2827,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function addClassName(element, className) {
-    if (!(element = $(element))) return;
+    if (!(element = $rc(element))) return;
 
     if (!hasClassName(element, className))
       element.className += (element.className ? ' ' : '') + className;
@@ -2836,7 +2836,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function removeClassName(element, className) {
-    if (!(element = $(element))) return;
+    if (!(element = $rc(element))) return;
 
     element.className = element.className.replace(
      getRegExpForClassName(className), ' ').strip();
@@ -2845,7 +2845,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function toggleClassName(element, className, bool) {
-    if (!(element = $(element))) return;
+    if (!(element = $rc(element))) return;
 
     if (Object.isUndefined(bool))
       bool = !hasClassName(element, className);
@@ -2888,7 +2888,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function _getFlag(element, attribute) {
-    return $(element).hasAttribute(attribute) ? attribute : null;
+    return $rc(element).hasAttribute(attribute) ? attribute : null;
   }
 
   DIV.onclick = Prototype.emptyFunction;
@@ -3019,7 +3019,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function setStyle(element, styles) {
-    element = $(element);
+    element = $rc(element);
     var elementStyle = element.style, match;
 
     if (Object.isString(styles)) {
@@ -3049,7 +3049,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
 
 
   function getStyle(element, style) {
-    element = $(element);
+    element = $rc(element);
     style = normalizeStyleName(style);
 
     var value = element.style[style];
@@ -3079,7 +3079,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function getStyle_IE(element, style) {
-    element = $(element);
+    element = $rc(element);
     style = normalizeStyleName_IE(style);
 
     var value = element.style[style];
@@ -3115,7 +3115,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   })();
 
   function setOpacity(element, value) {
-    element = $(element);
+    element = $rc(element);
     if (value == 1 || value === '') value = '';
     else if (value < 0.00001) value = 0;
     element.style.opacity = value;
@@ -3126,7 +3126,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
     if (STANDARD_CSS_OPACITY_SUPPORTED)
       return setOpacity(element, value);
 
-    element = hasLayout_IE($(element));
+    element = hasLayout_IE($rc(element));
     var filter = Element.getStyle(element, 'filter'),
      style = element.style;
 
@@ -3198,7 +3198,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
     getUniqueElementID = getUniqueElementID_IE;
 
   function getStorage(element) {
-    if (!(element = $(element))) return;
+    if (!(element = $rc(element))) return;
 
     var uid = getUniqueElementID(element);
 
@@ -3209,7 +3209,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function store(element, key, value) {
-    if (!(element = $(element))) return;
+    if (!(element = $rc(element))) return;
     var storage = getStorage(element);
     if (arguments.length === 2) {
       storage.update(key);
@@ -3220,7 +3220,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function retrieve(element, key, defaultValue) {
-    if (!(element = $(element))) return;
+    if (!(element = $rc(element))) return;
     var storage = getStorage(element), value = storage.get(key);
 
     if (Object.isUndefined(value)) {
@@ -3442,7 +3442,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function getRawStyle(element, style) {
-    element = $(element);
+    element = $rc(element);
 
     var value = element.style[style];
     if (!value || value === 'auto') {
@@ -3524,9 +3524,9 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
         }
       } else {
         if (isHorizontal) {
-          whole = $(context).measure('width');
+          whole = $rc(context).measure('width');
         } else if (isVertical) {
-          whole = $(context).measure('height');
+          whole = $rc(context).measure('height');
         }
       }
 
@@ -3548,7 +3548,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
       if (display === 'none') {
         return false;
       }
-      element = $(element.parentNode);
+      element = $rc(element.parentNode);
     }
     return true;
   }
@@ -3571,7 +3571,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   Element.Layout = Class.create(Hash, {
     initialize: function($super, element, preCompute) {
       $super();
-      this.element = $(element);
+      this.element = $rc(element);
 
       Element.Layout.PROPERTIES.each( function(property) {
         this._set(property, null);
@@ -3643,7 +3643,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
       } else if (position === 'absolute' || position === 'fixed') {
         newWidth = getContentWidth(element, context);
       } else {
-        var parent = element.parentNode, pLayout = $(parent).getLayout();
+        var parent = element.parentNode, pLayout = $rc(parent).getLayout();
 
         newWidth = pLayout.get('width') -
          this.get('margin-left') -
@@ -3952,7 +3952,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function measure(element, property) {
-    return $(element).getLayout().get(property);
+    return $rc(element).getLayout().get(property);
   }
 
   function getHeight(element) {
@@ -3964,7 +3964,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function getDimensions(element) {
-    element = $(element);
+    element = $rc(element);
     var display = Element.getStyle(element, 'display');
 
     if (display && display !== 'none') {
@@ -3999,26 +3999,26 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function getOffsetParent(element) {
-    element = $(element);
+    element = $rc(element);
 
     if (isDocument(element) || isDetached(element) || isBody(element) || isHtml(element))
-      return $(document.body);
+      return $rc(document.body);
 
     var isInline = (Element.getStyle(element, 'display') === 'inline');
-    if (!isInline && element.offsetParent) return $(element.offsetParent);
+    if (!isInline && element.offsetParent) return $rc(element.offsetParent);
 
     while ((element = element.parentNode) && element !== document.body) {
       if (Element.getStyle(element, 'position') !== 'static') {
-        return isHtml(element) ? $(document.body) : $(element);
+        return isHtml(element) ? $rc(document.body) : $rc(element);
       }
     }
 
-    return $(document.body);
+    return $rc(document.body);
   }
 
 
   function cumulativeOffset(element) {
-    element = $(element);
+    element = $rc(element);
     var valueT = 0, valueL = 0;
     if (element.parentNode) {
       do {
@@ -4031,7 +4031,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function positionedOffset(element) {
-    element = $(element);
+    element = $rc(element);
 
     var layout = element.getLayout();
 
@@ -4066,7 +4066,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   function viewportOffset(forElement) {
     var valueT = 0, valueL = 0, docBody = document.body;
 
-    var element = $(forElement);
+    var element = $rc(forElement);
     do {
       valueT += element.offsetTop  || 0;
       valueL += element.offsetLeft || 0;
@@ -4085,7 +4085,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function absolutize(element) {
-    element = $(element);
+    element = $rc(element);
 
     if (Element.getStyle(element, 'position') === 'absolute') {
       return element;
@@ -4117,7 +4117,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function relativize(element) {
-    element = $(element);
+    element = $rc(element);
     if (Element.getStyle(element, 'position') === 'relative') {
       return element;
     }
@@ -4131,7 +4131,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
 
 
   function scrollTo(element) {
-    element = $(element);
+    element = $rc(element);
     var pos = Element.cumulativeOffset(element);
     window.scrollTo(pos.left, pos.top);
     return element;
@@ -4139,7 +4139,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
 
 
   function makePositioned(element) {
-    element = $(element);
+    element = $rc(element);
     var position = Element.getStyle(element, 'position'), styles = {};
     if (position === 'static' || !position) {
       styles.position = 'relative';
@@ -4154,7 +4154,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function undoPositioned(element) {
-    element = $(element);
+    element = $rc(element);
     var storage = Element.getStorage(element),
      madePositioned = storage.get('prototype_made_positioned');
 
@@ -4172,7 +4172,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function makeClipping(element) {
-    element = $(element);
+    element = $rc(element);
 
     var storage = Element.getStorage(element),
      madeClipping = storage.get('prototype_made_clipping');
@@ -4188,7 +4188,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function undoClipping(element) {
-    element = $(element);
+    element = $rc(element);
     var storage = Element.getStorage(element),
      overflow = storage.get('prototype_made_clipping');
 
@@ -4210,8 +4210,8 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
       offsetLeft: 0
     }, options || {});
 
-    source  = $(source);
-    element = $(element);
+    source  = $rc(source);
+    element = $rc(element);
     var p, delta, layout, styles = {};
 
     if (options.setLeft || options.setTop) {
@@ -4244,10 +4244,10 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   if (Prototype.Browser.IE) {
     getOffsetParent = getOffsetParent.wrap(
       function(proceed, element) {
-        element = $(element);
+        element = $rc(element);
 
         if (isDocument(element) || isDetached(element) || isBody(element) || isHtml(element))
-          return $(document.body);
+          return $rc(document.body);
 
         var position = element.getStyle('position');
         if (position !== 'static') return proceed(element);
@@ -4260,7 +4260,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
     );
 
     positionedOffset = positionedOffset.wrap(function(proceed, element) {
-      element = $(element);
+      element = $rc(element);
       if (!element.parentNode) return new Element.Offset(0, 0);
       var position = element.getStyle('position');
       if (position !== 'static') return proceed(element);
@@ -4276,7 +4276,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
     });
   } else if (Prototype.Browser.Webkit) {
     cumulativeOffset = function(element) {
-      element = $(element);
+      element = $rc(element);
       var valueT = 0, valueL = 0;
       do {
         valueT += element.offsetTop  || 0;
@@ -4334,7 +4334,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   if ('getBoundingClientRect' in document.documentElement) {
     Element.addMethods({
       viewportOffset: function(element) {
-        element = $(element);
+        element = $rc(element);
         if (isDetached(element)) return new Element.Offset(0, 0);
 
         var rect = element.getBoundingClientRect(),
@@ -5784,7 +5784,7 @@ delete Prototype._original_property;
 
 var Form = {
   reset: function(form) {
-    form = $(form);
+    form = $rc(form);
     form.reset();
     return form;
   },
@@ -5815,7 +5815,7 @@ var Form = {
 
     return elements.inject(initial, function(result, element) {
       if (!element.disabled && element.name) {
-        key = element.name; value = $(element).getValue();
+        key = element.name; value = $rc(element).getValue();
         if (value != null && element.type != 'file' && (element.type != 'submit' || (!submitted &&
             submit !== false && (!submit || key == submit) && (submitted = true)))) {
           result = accumulator(result, key, value);
@@ -5833,7 +5833,7 @@ Form.Methods = {
 
 
   getElements: function(form) {
-    var elements = $(form).getElementsByTagName('*');
+    var elements = $rc(form).getElementsByTagName('*');
     var element, results = [], serializers = Form.Element.Serializers;
 
     for (var i = 0; element = elements[i]; i++) {
@@ -5844,7 +5844,7 @@ Form.Methods = {
   },
 
   getInputs: function(form, typeName, name) {
-    form = $(form);
+    form = $rc(form);
     var inputs = form.getElementsByTagName('input');
 
     if (!typeName && !name) return $A(inputs).map(Element.extend);
@@ -5860,19 +5860,19 @@ Form.Methods = {
   },
 
   disable: function(form) {
-    form = $(form);
+    form = $rc(form);
     Form.getElements(form).invoke('disable');
     return form;
   },
 
   enable: function(form) {
-    form = $(form);
+    form = $rc(form);
     Form.getElements(form).invoke('enable');
     return form;
   },
 
   findFirstElement: function(form) {
-    var elements = $(form).getElements().findAll(function(element) {
+    var elements = $rc(form).getElements().findAll(function(element) {
       return 'hidden' != element.type && !element.disabled;
     });
     var firstByIndex = elements.findAll(function(element) {
@@ -5885,14 +5885,14 @@ Form.Methods = {
   },
 
   focusFirstElement: function(form) {
-    form = $(form);
+    form = $rc(form);
     var element = form.findFirstElement();
     if (element) element.activate();
     return form;
   },
 
   request: function(form, options) {
-    form = $(form), options = Object.clone(options || { });
+    form = $rc(form), options = Object.clone(options || { });
 
     var params = options.parameters, action = form.readAttribute('action') || '';
     if (action.blank()) action = window.location.href;
@@ -5915,12 +5915,12 @@ Form.Methods = {
 
 Form.Element = {
   focus: function(element) {
-    $(element).focus();
+    $rc(element).focus();
     return element;
   },
 
   select: function(element) {
-    $(element).select();
+    $rc(element).select();
     return element;
   }
 };
@@ -5928,7 +5928,7 @@ Form.Element = {
 Form.Element.Methods = {
 
   serialize: function(element) {
-    element = $(element);
+    element = $rc(element);
     if (!element.disabled && element.name) {
       var value = element.getValue();
       if (value != undefined) {
@@ -5941,29 +5941,29 @@ Form.Element.Methods = {
   },
 
   getValue: function(element) {
-    element = $(element);
+    element = $rc(element);
     var method = element.tagName.toLowerCase();
     return Form.Element.Serializers[method](element);
   },
 
   setValue: function(element, value) {
-    element = $(element);
+    element = $rc(element);
     var method = element.tagName.toLowerCase();
     Form.Element.Serializers[method](element, value);
     return element;
   },
 
   clear: function(element) {
-    $(element).value = '';
+    $rc(element).value = '';
     return element;
   },
 
   present: function(element) {
-    return $(element).value != '';
+    return $rc(element).value != '';
   },
 
   activate: function(element) {
-    element = $(element);
+    element = $rc(element);
     try {
       element.focus();
       if (element.select && (element.tagName.toLowerCase() != 'input' ||
@@ -5974,13 +5974,13 @@ Form.Element.Methods = {
   },
 
   disable: function(element) {
-    element = $(element);
+    element = $rc(element);
     element.disabled = true;
     return element;
   },
 
   enable: function(element) {
-    element = $(element);
+    element = $rc(element);
     element.disabled = false;
     return element;
   }
@@ -6072,7 +6072,7 @@ Form.Element.Serializers = (function() {
 Abstract.TimedObserver = Class.create(PeriodicalExecuter, {
   initialize: function($super, element, frequency, callback) {
     $super(callback, frequency);
-    this.element   = $(element);
+    this.element   = $rc(element);
     this.lastValue = this.getValue();
   },
 
@@ -6102,7 +6102,7 @@ Form.Observer = Class.create(Abstract.TimedObserver, {
 
 Abstract.EventObserver = Class.create({
   initialize: function(element, callback) {
-    this.element  = $(element);
+    this.element  = $rc(element);
     this.callback = callback;
 
     this.lastValue = this.getValue();
@@ -6460,7 +6460,7 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
 
 
   function observe(element, eventName, handler) {
-    element = $(element);
+    element = $rc(element);
     var entry = register(element, eventName, handler);
 
     if (entry === null) return element;
@@ -6493,7 +6493,7 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
   }
 
   function stopObserving(element, eventName, handler) {
-    element = $(element);
+    element = $rc(element);
     var handlerGiven = !Object.isUndefined(handler),
      eventNameGiven = !Object.isUndefined(eventName);
 
@@ -6580,7 +6580,7 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
   }
 
   function fire(element, eventName, memo, bubble) {
-    element = getFireTarget($(element));
+    element = getFireTarget($rc(element));
     if (Object.isUndefined(bubble)) bubble = true;
     memo = memo || {};
 
@@ -6616,7 +6616,7 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
 
   Event.Handler = Class.create({
     initialize: function(element, eventName, selector, callback) {
-      this.element   = $(element);
+      this.element   = $rc(element);
       this.eventName = eventName;
       this.selector  = selector;
       this.callback  = callback;
@@ -6641,7 +6641,7 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
   });
 
   function on(element, eventName, selector, callback) {
-    element = $(element);
+    element = $rc(element);
     if (Object.isFunction(selector) && Object.isUndefined(callback)) {
       callback = selector, selector = null;
     }
@@ -6925,7 +6925,7 @@ if (!document.getElementsByClassName) document.getElementsByClassName = function
     var elements = [], classNames = (/\s/.test(className) ? $w(className) : null);
     if (!classNames && !className) return elements;
 
-    var nodes = $(element).getElementsByTagName('*');
+    var nodes = $rc(element).getElementsByTagName('*');
     className = ' ' + className + ' ';
 
     for (var i = 0, child, cn; child = nodes[i]; i++) {
@@ -6939,7 +6939,7 @@ if (!document.getElementsByClassName) document.getElementsByClassName = function
   };
 
   return function(className, parentElement) {
-    return $(parentElement || document.body).getElementsByClassName(className);
+    return $rc(parentElement || document.body).getElementsByClassName(className);
   };
 }(Element.Methods);
 
@@ -6948,7 +6948,7 @@ if (!document.getElementsByClassName) document.getElementsByClassName = function
 Element.ClassNames = Class.create();
 Element.ClassNames.prototype = {
   initialize: function(element) {
-    this.element = $(element);
+    this.element = $rc(element);
   },
 
   _each: function(iterator, context) {
